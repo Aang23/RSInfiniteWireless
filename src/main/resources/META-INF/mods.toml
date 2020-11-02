@@ -1,0 +1,19 @@
+modLoader = "javafml"
+loaderVersion = "[34,)"
+issueTrackerURL = "https://github.com/Aang23/RSInfiniteWireless"
+license = "MIT"
+[[mods]]
+modId = "rsinfinitewireless"
+version = "${version}"
+displayName = "Refined Storage Infinite Wireless"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/rsinfinitewireless"
+authors = "Aang23"
+description = '''
+Adds back the infinite wireless transmitter ! Based on Refined Storage Addons.
+'''
+[[dependencies.rsinfinitewireless]]
+modId = "refinedstorage"
+versionRange = "[1.9.6,)"
+mandatory = true
+ordering = "AFTER"
+side = "BOTH"
