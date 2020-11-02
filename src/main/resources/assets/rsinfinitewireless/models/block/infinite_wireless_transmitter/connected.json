@@ -1,0 +1,6 @@
+{
+  "parent": "refinedstorage:block/wireless_transmitter",
+  "textures": {
+    "cutout": "rsinfinitewireless:block/infinite_wireless_transmitter/cutouts/connected"
+  }
+}

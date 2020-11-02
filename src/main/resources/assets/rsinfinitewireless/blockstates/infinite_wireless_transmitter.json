@@ -1,26 +1,56 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-      "model": "refinedstorage:wireless_transmitter",
-      "textures": {
-        "torch": "rsinfinitewireless:blocks/infinite_wireless_transmitter",
-        "cutout": "rsinfinitewireless:blocks/infinite_wireless_transmitter_disconnected"
-      }
+  "variants": {
+    "connected=false,direction=down": {
+      "model": "rsinfinitewireless:block/infinite_wireless_transmitter/disconnected"
     },
-    "variants": {
-      "inventory": [
-        {
-          "transform": "forge:default-block"
-        }
-      ],
-      "connected": {
-        "true": {
-          "textures": {
-            "cutout": "rsinfinitewireless:blocks/infinite_wireless_transmitter_connected"
-          }
-        },
-        "false": {
-        }
-      }
+    "connected=true,direction=down": {
+      "model": "rsinfinitewireless:block/infinite_wireless_transmitter/connected"
+    },
+    "connected=false,direction=up": {
+      "model": "rsinfinitewireless:block/infinite_wireless_transmitter/disconnected",
+      "x": 180
+    },
+    "connected=true,direction=up": {
+      "model": "rsinfinitewireless:block/infinite_wireless_transmitter/connected",
+      "x": 180
+    },
+    "connected=false,direction=north": {
+      "model": "rsinfinitewireless:block/infinite_wireless_transmitter/disconnected",
+      "x": 90,
+      "y": 180
+    },
+    "connected=true,direction=north": {
+      "model": "rsinfinitewireless:block/infinite_wireless_transmitter/connected",
+      "x": 90,
+      "y": 180
+    },
+    "connected=false,direction=south": {
+      "model": "rsinfinitewireless:block/infinite_wireless_transmitter/disconnected",
+      "x": 90
+    },
+    "connected=true,direction=south": {
+      "model": "rsinfinitewireless:block/infinite_wireless_transmitter/connected",
+      "x": 90
+    },
+    "connected=false,direction=west": {
+      "model": "rsinfinitewireless:block/infinite_wireless_transmitter/disconnected",
+      "x": 90,
+      "y": 90
+    },
+    "connected=true,direction=west": {
+      "model": "rsinfinitewireless:block/infinite_wireless_transmitter/connected",
+      "x": 90,
+      "y": 90
+    },
+    "connected=false,direction=east": {
+      "model": "rsinfinitewireless:block/infinite_wireless_transmitter/disconnected",
+      "x": 90,
+      "y": 270
+    },
+    "connected=true,direction=east": {
+      "model": "rsinfinitewireless:block/infinite_wireless_transmitter/connected",
+      "x": 90,
+      "y": 270
     }
-  } 
+  }
+}

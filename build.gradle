@@ -1,65 +1,122 @@
 buildscript {
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
+
+repositories {
+    maven {
+        url "https://repo.refinedmods.com/"
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven'
 
 version = "1.2"
 def env = System.getenv()
 if (env.BUILD_NUMBER) {
-    version = version + "-" + "${env.BUILD_NUMBER}"
+    version = version + "+" + "${env.BUILD_NUMBER}"
 }
 
 group = "rsinfinitewireless"
 archivesBaseName = "rsinfinitewireless"
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    version = "1.12.2-14.23.4.2703"
-    runDir = "run"
-    useDepAts = true
-    mappings = "snapshot_20180714"
+    mappings channel: 'snapshot', version: '20200723-1.16.1'
 
-    replaceIn "RSInfiniteWireless.java"
-    replace "@version@", project.version
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                rsinfinitewireless {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                rsinfinitewireless {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'rsinfinitewireless', '--all', '--output', file('src/generated/resources/')
+            mods {
+                rsinfinitewireless {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
-repositories {
-    maven {
-        url "https://repo.raoulvdberge.com"
+processResources {
+    inputs.property 'version', project.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'META-INF/mods.toml'
+
+        expand 'version': project.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'META-INF/mods.toml'
     }
 }
 
 dependencies {
-    deobfCompile "refinedstorage:refinedstorage:1.6.13-373"
-}
-
-processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-
-        expand 'version': project.version, 'mcversion': project.minecraft.version
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+    minecraft "net.minecraftforge:forge:1.16.3-34.1.0"
+    compileOnly fg.deobf("com.refinedmods:refinedstorage:1.9.8+126")
+    runtimeOnly fg.deobf("com.refinedmods:refinedstorage:1.9.8+126")
 }
 
 jar {
-    include "com/aang23/rsinfinitewireless/**"
-    include "assets/**"
-    include "mcmod.info"
-    include "pack.mcmeta"
+    manifest {
+        attributes([
+            "Specification-Title"     : "rsinfinitewireless",
+            "Specification-Vendor"    : "rsinfinitewireless",
+            "Specification-Version"   : "1",
+            "Implementation-Title"    : project.name,
+            "Implementation-Version"  : "${version}",
+            "Implementation-Vendor"   : "rsinfinitewireless",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task deobfJar(type:Jar) {
+    from sourceSets.main.output
+    classifier 'deobf'
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives deobfJar
 }
